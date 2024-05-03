@@ -1,76 +1,95 @@
 import streamlit as st
 from pytube import YouTube
-import os
-import re  # Add this line
-from streamlit.components.v1 import html
+import tempfile
 
-directory = 'downloads/'
-if not os.path.exists(directory):
-    os.makedirs(directory)
+st.set_page_config(
+    page_title="YouTube Downloader",
+    page_icon="./logo_nphi.png",
+    layout="wide",
+)
 
-st.set_page_config(page_title="YTD", page_icon="🚀", layout="wide", )
+st.markdown("<h1 style='text-align: center; color: red; font-style:italic;'>YouTube Downloader</h1>", unsafe_allow_html=True)
 
-@st.cache_data
-def get_info(url):
-    yt = YouTube(url)
-    streams = yt.streams.filter(progressive=True, type='video')
-    details = {}
-    details["image"] = yt.thumbnail_url
-    details["streams"] = streams
-    details["title"] = yt.title
-    details["length"] = yt.length
-    itag, resolutions = ([] for i in range(2))
-    for i in streams:
-        res = re.search(r'(\d+)p', str(i))
-        tag = re.search(r'(\d+)', str(i))
-        itag.append(str(i)[tag.start():tag.end()])
-        resolutions.append(str(i)[res.start():res.end()])
-    details["resolutions"] = resolutions
-    details["itag"] = itag
-    return details
+link = st.text_input(label="Paste your link here", placeholder="https://www.youtube.com/..")
 
-def open_page(url):
-    open_script= """
-        <script type="text/javascript">
-            window.open('%s', '_blank').focus();
-        </script>
-    """ % (url)
-    html(open_script)
+# Function for checking if a YouTube link is valid
+def is_youtube(link):
+    try:
+        yt = YouTube(link)
+        return yt.streams.filter(only_video=True).first() is not None
+    except:
+        return False
 
-st.title("YouTube Downloader 🚀")
-st.write(":red[NO ADS only fast downloading...]")
-url = st.text_input("Paste URL here 👇", placeholder='https://www.youtube.com/')
-if url:
-    v_info = get_info(url)
-    col1, col2 = st.columns([1, 1.5], gap="small")
-    with st.container():
-        with col1:
-            st.image(v_info["image"])
-        with col2:
-            st.subheader("Video Details ⚙️")
-            st.write(f"__Title:__ {v_info['title']}")
-            st.write(f"__Length:__ {v_info['length']} sec")
-            st.write("__Available Resolutions:__")
-            for resolution in v_info["resolutions"]:
-                id = v_info["resolutions"].index(resolution)
-                if st.button(f"- Resolution: {resolution}"):
-                    st.write(f"__Resolution:__ {resolution}")
-                    st.write(f"__Size:__ {v_info['streams'][id].filesize / 1000000:.2f} MB")
-                    st.write(f"__Format:__ {v_info['streams'][id].mime_type}")
-                    file_name = st.text_input('__Save as 🎯__', placeholder=v_info['title'])
-                    if file_name:
-                        if file_name != v_info['title']:
-                            file_name += ".mp4"
-                    else:
-                        file_name = v_info['title'] + ".mp4"
-                    button = st.button("Download ⚡️")
-                    if button:
-                        download_link = f"downloads/{file_name}"
-                        open_page(download_link)
+# Function for searching a key in a dictionary
+def key_search(dicti, value):
+    return list(filter(lambda x: dicti[x] == value, dicti))[0]
 
-st.markdown("""
-DONE by **:green[YUKESH G SRIRAMAN PRASAD]**
-AS A PART OF FINAL YEAR PROJECT 
-""")
+if (is_youtube(link)):
+    youtube_1 = YouTube(link)
+    title = youtube_1.title
+    st.image(youtube_1.thumbnail_url, width=200)
+    
+    with st.expander("Video Details"):
+        st.write(f"Title: {title}")
+        st.write(f"Length: {youtube_1.length} seconds")
+
+        # Calculate size of video based on selected resolution
+        if youtube_1.length:
+            selected_stream = None
+            for stream in youtube_1.streams:
+                if stream.includes_audio_track and stream.includes_video_track and stream.resolution == list_vid[strm]:
+                    selected_stream = stream
+                    break
+            if selected_stream:
+                size_mb = selected_stream.filesize / (1024 * 1024)
+                st.write(f"Size: {size_mb:.2f} MB")
+
+    out = st.selectbox("Select format", ('Audio', 'Video'))
+
+    # Now for audio
+    if out == "Audio":
+        audio = youtube_1.streams.filter(only_audio=True)
+        list_aud = {}
+        for i in range(len(audio)):
+            list_aud[i] = audio[i].abr
+        strm = st.selectbox("Select Quality", (list_aud.values()))
+
+        key_val = key_search(list_aud, strm)
+        temp_dir = tempfile.mkdtemp()
+        temp_file_path = temp_dir + f"/{title}.mp3"
+
+        if audio[key_val].download(output_path=temp_dir, filename=f'{title}.mp3'):
+            st.download_button(
+                label="download",
+                data=open(temp_file_path, 'rb').read(),
+                file_name=f'nphi-{title}.mp3',
+                mime='audio/mp3'
+            )
+
+    # For video
+    elif out == "Video":
+        video = [stream for stream in youtube_1.streams if stream.includes_audio_track and stream.includes_video_track]
+        list_vid = {}
+        for i in range(len(video)):
+            list_vid[i] = video[i].resolution
+
+        strm = st.selectbox("Select Quality", (list_vid.values()))
+        key_val = key_search(list_vid, strm)
+        extension = video[key_val].mime_type.split('/')[1]
+
+        temp_dir = tempfile.mkdtemp()
+        temp_file_path = temp_dir + f"/{title}.{extension}"
+
+        if video[key_val].download(output_path=temp_dir, filename=f'{title}.{extension}'):
+            st.download_button(
+                label="download",
+                data=open(temp_file_path, 'rb').read(),
+                file_name=f'nphi-{title}.{extension}',
+                mime='video/mp4'
+            )
+
+else:
+    st.write("Please Enter a Valid Link")
+
 
 
