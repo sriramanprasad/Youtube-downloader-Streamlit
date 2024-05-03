@@ -3,8 +3,8 @@ from pytube import YouTube
 import tempfile
 
 st.set_page_config(
-    page_title="YouTube Downloader",
-    page_icon=":yt:",
+    page_title="Fast Downloader",
+    page_icon="⚡",
     layout="wide",
 )
 
