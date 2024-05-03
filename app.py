@@ -33,63 +33,54 @@ if (is_youtube(link)):
         st.write(f"Title: {title}")
         st.write(f"Length: {youtube_1.length} seconds")
 
-        # Calculate size of video based on selected resolution
-        if youtube_1.length:
-            selected_stream = None
-            for stream in youtube_1.streams:
-                if stream.includes_audio_track and stream.includes_video_track and stream.resolution == list_vid[strm]:
-                    selected_stream = stream
-                    break
-            if selected_stream:
-                size_mb = selected_stream.filesize / (1024 * 1024)
-                st.write(f"Size: {size_mb:.2f} MB")
-
-    out = st.selectbox("Select format", ('Audio', 'Video'))
-
-    # Now for audio
-    if out == "Audio":
-        audio = youtube_1.streams.filter(only_audio=True)
-        list_aud = {}
-        for i in range(len(audio)):
-            list_aud[i] = audio[i].abr
-        strm = st.selectbox("Select Quality", (list_aud.values()))
-
-        key_val = key_search(list_aud, strm)
-        temp_dir = tempfile.mkdtemp()
-        temp_file_path = temp_dir + f"/{title}.mp3"
-
-        if audio[key_val].download(output_path=temp_dir, filename=f'{title}.mp3'):
-            st.download_button(
-                label="download",
-                data=open(temp_file_path, 'rb').read(),
-                file_name=f'nphi-{title}.mp3',
-                mime='audio/mp3'
-            )
-
-    # For video
-    elif out == "Video":
+        # Define list_vid dictionary
         video = [stream for stream in youtube_1.streams if stream.includes_audio_track and stream.includes_video_track]
         list_vid = {}
         for i in range(len(video)):
             list_vid[i] = video[i].resolution
 
-        strm = st.selectbox("Select Quality", (list_vid.values()))
-        key_val = key_search(list_vid, strm)
-        extension = video[key_val].mime_type.split('/')[1]
+        out = st.selectbox("Select format", ('Audio', 'Video'))
 
-        temp_dir = tempfile.mkdtemp()
-        temp_file_path = temp_dir + f"/{title}.{extension}"
+        # Now for audio
+        if out == "Audio":
+            audio = youtube_1.streams.filter(only_audio=True)
+            list_aud = {}
+            for i in range(len(audio)):
+                list_aud[i] = audio[i].abr
+            strm = st.selectbox("Select Quality", (list_aud.values()))
 
-        if video[key_val].download(output_path=temp_dir, filename=f'{title}.{extension}'):
-            st.download_button(
-                label="download",
-                data=open(temp_file_path, 'rb').read(),
-                file_name=f'nphi-{title}.{extension}',
-                mime='video/mp4'
-            )
+            key_val = key_search(list_aud, strm)
+            temp_dir = tempfile.mkdtemp()
+            temp_file_path = temp_dir + f"/{title}.mp3"
+
+            if audio[key_val].download(output_path=temp_dir, filename=f'{title}.mp3'):
+                st.download_button(
+                    label="download",
+                    data=open(temp_file_path, 'rb').read(),
+                    file_name=f'nphi-{title}.mp3',
+                    mime='audio/mp3'
+                )
+
+        # For video
+        elif out == "Video":
+            strm = st.selectbox("Select Quality", (list_vid.values()))
+            key_val = key_search(list_vid, strm)
+            extension = video[key_val].mime_type.split('/')[1]
+
+            temp_dir = tempfile.mkdtemp()
+            temp_file_path = temp_dir + f"/{title}.{extension}"
+
+            if video[key_val].download(output_path=temp_dir, filename=f'{title}.{extension}'):
+                st.download_button(
+                    label="download",
+                    data=open(temp_file_path, 'rb').read(),
+                    file_name=f'nphi-{title}.{extension}',
+                    mime='video/mp4'
+                )
 
 else:
     st.write("Please Enter a Valid Link")
+
 
 
 
