@@ -9,6 +9,7 @@ st.set_page_config(
 )
 
 st.markdown("<h1 style='text-align: center; color: white;'>YouTube Downloader</h1>", unsafe_allow_html=True)
+st.write(" :red[ZERO ADS FAST & DOWNLOADING ......]")
 
 link = st.text_input(label="Paste your link here", placeholder="https://www.youtube.com/..")
 
