@@ -68,7 +68,8 @@ if (is_youtube(link)):
         if out == "Video":
             strm = st.selectbox("Select Quality", [resolution for resolution in list_vid.keys()])
             key_val = key_search(list_vid, strm)
-            selected_stream = video[key_val]  # Get the selected stream directly
+            key_val_int = int(key_val)  # Convert key_val to integer
+            selected_stream = video[key_val_int]  # Get the selected stream
 
             extension = selected_stream.mime_type.split('/')[1]
 
