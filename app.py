@@ -62,30 +62,10 @@ if (is_youtube(link)):
         for resolution, file_size in list_vid.items():
             st.write(f"Resolution: {resolution} - File Size: {file_size}")
 
-        out = st.selectbox("Select format", ('Audio', 'Video'))
-
-        # Now for audio
-        if out == "Audio":
-            audio = youtube_1.streams.filter(only_audio=True)
-            list_aud = {}
-            for i in range(len(audio)):
-                list_aud[i] = audio[i].abr
-            strm = st.selectbox("Select Quality", (list_aud.values()))
-
-            key_val = key_search(list_aud, strm)
-            temp_dir = tempfile.mkdtemp()
-            temp_file_path = temp_dir + f"/{title}.mp3"
-
-            if audio[key_val].download(output_path=temp_dir, filename=f'{title}.mp3'):
-                st.download_button(
-                    label="download",
-                    data=open(temp_file_path, 'rb').read(),
-                    file_name=f'nphi-{title}.mp3',
-                    mime='audio/mp3'
-                )
+        out = "Video"  # Set output to Video
 
         # For video
-        elif out == "Video":
+        if out == "Video":
             strm = st.selectbox("Select Quality", [resolution for resolution in list_vid.keys()])
             key_val = key_search(list_vid, strm)
             extension = video[key_val].mime_type.split('/')[1]
@@ -103,6 +83,5 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
-
 
 
