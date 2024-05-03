@@ -20,10 +20,6 @@ def is_youtube(link):
     except:
         return False
 
-# Function for searching a key in a dictionary
-def key_search(dicti, value):
-    return list(filter(lambda x: dicti[x] == value, dicti))[0]
-
 if (is_youtube(link)):
     youtube_1 = YouTube(link)
     title = youtube_1.title
@@ -37,7 +33,11 @@ if (is_youtube(link)):
         video = [stream for stream in youtube_1.streams if stream.includes_audio_track and stream.includes_video_track]
         list_vid = {}
         for i in range(len(video)):
-            list_vid[i] = video[i].resolution
+            list_vid[i] = {
+                'resolution': video[i].resolution,
+                'file_size': f"{(video[i].filesize / (1024 * 1024)):.2f} MB" if video[i].filesize else "Unknown"
+            }
+            st.write(f"Resolution: {video[i].resolution} - File Size: {list_vid[i]['file_size']}")
 
         out = st.selectbox("Select format", ('Audio', 'Video'))
 
@@ -63,7 +63,7 @@ if (is_youtube(link)):
 
         # For video
         elif out == "Video":
-            strm = st.selectbox("Select Quality", (list_vid.values()))
+            strm = st.selectbox("Select Quality", [item['resolution'] for item in list_vid.values()])
             key_val = key_search(list_vid, strm)
             extension = video[key_val].mime_type.split('/')[1]
 
@@ -80,7 +80,5 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
-
-
 
 
