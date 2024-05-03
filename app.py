@@ -68,12 +68,14 @@ if (is_youtube(link)):
         if out == "Video":
             strm = st.selectbox("Select Quality", [resolution for resolution in list_vid.keys()])
             key_val = key_search(list_vid, strm)
-            extension = video[key_val].mime_type.split('/')[1]
+            selected_stream = video[key_val]  # Get the selected stream directly
+
+            extension = selected_stream.mime_type.split('/')[1]
 
             temp_dir = tempfile.mkdtemp()
             temp_file_path = temp_dir + f"/{title}.{extension}"
 
-            if video[key_val].download(output_path=temp_dir, filename=f'{title}.{extension}'):
+            if selected_stream.download(output_path=temp_dir, filename=f'{title}.{extension}'):
                 st.download_button(
                     label="download",
                     data=open(temp_file_path, 'rb').read(),
@@ -83,5 +85,3 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
-
-
