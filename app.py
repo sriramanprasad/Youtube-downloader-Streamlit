@@ -9,7 +9,7 @@ if not os.path.exists(directory):
 
 st.set_page_config(page_title="YTD", page_icon="🚀", layout="wide", )
 
-@st.cache(allow_output_mutation=True)
+@st.cache_data(allow_output_mutation=True)
 def get_info(url):
     yt = YouTube(url)
     streams = yt.streams.filter(progressive=True, type='video')
