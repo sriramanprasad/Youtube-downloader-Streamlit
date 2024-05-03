@@ -22,7 +22,10 @@ def is_youtube(link):
 
 # Function for searching a key in a dictionary
 def key_search(dicti, value):
-    return list(filter(lambda x: dicti[x] == value, dicti))[0]
+    for key, val in dicti.items():
+        if val == value:
+            return key
+    raise ValueError(f"Value '{value}' not found in dictionary")
 
 if (is_youtube(link)):
     youtube_1 = YouTube(link)
