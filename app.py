@@ -12,6 +12,7 @@ st.markdown("<h1 style='text-align: center; color: red; font-style:italic;'>YouT
 
 link = st.text_input(label="Paste your link here", placeholder="https://www.youtube.com/..")
 
+
 # Function for checking if a YouTube link is valid
 def is_youtube(link):
     try:
@@ -20,11 +21,12 @@ def is_youtube(link):
     except:
         return False
 
+
 # Function for searching a key in a dictionary
 def key_search(dicti, value):
     closest_resolution = None
     closest_diff = float('inf')
-    
+
     for key, val in dicti.items():
         if val == value:
             return key
@@ -36,17 +38,18 @@ def key_search(dicti, value):
             if diff < closest_diff:
                 closest_diff = diff
                 closest_resolution = key
-    
+
     if closest_resolution is not None:
         return closest_resolution
-    
+
     raise ValueError(f"Value '{value}' not found in dictionary")
+
 
 if (is_youtube(link)):
     youtube_1 = YouTube(link)
     title = youtube_1.title
     st.image(youtube_1.thumbnail_url, width=200)
-    
+
     with st.expander("Video Details"):
         st.write(f"Title: {title}")
         st.write(f"Length: {youtube_1.length} seconds")
@@ -67,9 +70,9 @@ if (is_youtube(link)):
         # For video
         if out == "Video":
             strm = st.selectbox("Select Quality", [resolution for resolution in list_vid.keys()])
-            key_val = key_search(list_vid, strm)
-            key_val_int = int(key_val)  # Convert key_val to integer
-            selected_stream = video[key_val_int]  # Get the selected stream
+            key_val = key_search(list_vid, strm)  # Now key_val holds the resolution string
+            key_index = list(list_vid.keys()).index(key_val)  # Find the index in video list
+            selected_stream = video[key_index]  # Access stream using the index
 
             extension = selected_stream.mime_type.split('/')[1]
 
@@ -86,3 +89,4 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
+
