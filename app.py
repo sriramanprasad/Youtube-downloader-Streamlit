@@ -8,7 +8,7 @@ st.set_page_config(
     layout="wide",
 )
 
-st.markdown("<h1 style='text-align: center; color: red; font-style:italic;'>YouTube Downloader</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: white;'>YouTube Downloader</h1>", unsafe_allow_html=True)
 
 link = st.text_input(label="Paste your link here", placeholder="https://www.youtube.com/..")
 
