@@ -22,9 +22,21 @@ def is_youtube(link):
 
 # Function for searching a key in a dictionary
 def key_search(dicti, value):
+    closest_resolution = None
+    closest_diff = float('inf')
+    
     for key, val in dicti.items():
         if val == value:
             return key
+        else:
+            diff = abs(int(val[:-1]) - int(value[:-1]))
+            if diff < closest_diff:
+                closest_diff = diff
+                closest_resolution = key
+    
+    if closest_resolution is not None:
+        return closest_resolution
+    
     raise ValueError(f"Value '{value}' not found in dictionary")
 
 if (is_youtube(link)):
@@ -40,11 +52,12 @@ if (is_youtube(link)):
         video = [stream for stream in youtube_1.streams if stream.includes_audio_track and stream.includes_video_track]
         list_vid = {}
         for i in range(len(video)):
-            list_vid[i] = {
-                'resolution': video[i].resolution,
-                'file_size': f"{(video[i].filesize / (1024 * 1024)):.2f} MB" if video[i].filesize else "Unknown"
-            }
-            st.write(f"Resolution: {video[i].resolution} - File Size: {list_vid[i]['file_size']}")
+            resolution = video[i].resolution
+            file_size = f"{(video[i].filesize / (1024 * 1024)):.2f} MB" if video[i].filesize else "Unknown"
+            list_vid[resolution] = file_size
+        st.write("Available Resolutions:")
+        for resolution, file_size in list_vid.items():
+            st.write(f"Resolution: {resolution} - File Size: {file_size}")
 
         out = st.selectbox("Select format", ('Audio', 'Video'))
 
@@ -70,7 +83,7 @@ if (is_youtube(link)):
 
         # For video
         elif out == "Video":
-            strm = st.selectbox("Select Quality", [item['resolution'] for item in list_vid.values()])
+            strm = st.selectbox("Select Quality", [resolution for resolution in list_vid.keys()])
             key_val = key_search(list_vid, strm)
             extension = video[key_val].mime_type.split('/')[1]
 
@@ -87,6 +100,5 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
-
 
 
