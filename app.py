@@ -20,6 +20,10 @@ def is_youtube(link):
     except:
         return False
 
+# Function for searching a key in a dictionary
+def key_search(dicti, value):
+    return list(filter(lambda x: dicti[x] == value, dicti))[0]
+
 if (is_youtube(link)):
     youtube_1 = YouTube(link)
     title = youtube_1.title
@@ -80,5 +84,6 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
+
 
 
