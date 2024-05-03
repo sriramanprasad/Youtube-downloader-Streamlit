@@ -29,7 +29,10 @@ def key_search(dicti, value):
         if val == value:
             return key
         else:
-            diff = abs(int(val[:-1]) - int(value[:-1]))
+            # Remove 'M' from resolution and convert to float
+            val_num = float(val[:-2])
+            value_num = float(value[:-2])
+            diff = abs(val_num - value_num)
             if diff < closest_diff:
                 closest_diff = diff
                 closest_resolution = key
@@ -100,5 +103,6 @@ if (is_youtube(link)):
 
 else:
     st.write("Please Enter a Valid Link")
+
 
 
