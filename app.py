@@ -1,7 +1,7 @@
 import streamlit as st
 from pytube import YouTube
 import os
-import re
+from streamlit.components.v1 import html
 
 directory = 'downloads/'
 if not os.path.exists(directory):
@@ -27,6 +27,14 @@ def get_info(url):
     details["resolutions"] = resolutions
     details["itag"] = itag
     return details
+
+def open_page(url):
+    open_script= """
+        <script type="text/javascript">
+            window.open('%s', '_blank').focus();
+        </script>
+    """ % (url)
+    html(open_script)
 
 st.title("YouTube Downloader 🚀")
 st.write(":red[NO ADS only fast downloading...]")
@@ -56,17 +64,11 @@ if url:
                         file_name = v_info['title'] + ".mp4"
                     button = st.button("Download ⚡️")
                     if button:
-                        with st.spinner('Downloading...'):
-                            try:
-                                ds = v_info["streams"].get_by_itag(v_info['itag'][id])
-                                ds.download(filename=file_name, output_path="downloads/")
-                                st.success('Download Complete', icon="✅")
-                                st.balloons()
-                            except:
-                                st.error('Error: Save with a different name!', icon="🚨")
-
+                        download_link = f"downloads/{file_name}"
+                        open_page(download_link)
 
 st.markdown("""
 DONE by **:green[YUKESH G SRIRAMAN PRASAD]**
 AS A PART OF FINAL YEAR PROJECT 
 """)
+
