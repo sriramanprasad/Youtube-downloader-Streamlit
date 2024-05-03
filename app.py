@@ -4,7 +4,7 @@ import tempfile
 
 st.set_page_config(
     page_title="YouTube Downloader",
-    page_icon="./logo_nphi.png",
+    page_icon=":yt:",
     layout="wide",
 )
 
