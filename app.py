@@ -91,5 +91,26 @@ if (is_youtube(link)):
 else:
     st.write("**:blue[Please Enter a Valid Link]**")
 
-st.write("Made By **:rainbow[Yukesh G]** & **:rainbow[Sri Raman]** as a part of FINAL YEAR PROJECT")
+st.write("")
+st.markdown(
+        """
+        <div class="footer">
+            Made By **:rainbow[Yukesh G]** & **:rainbow[Sri Raman]** as a part of FINAL YEAR PROJECT
+        </div>
+
+        <style>
+        .footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
