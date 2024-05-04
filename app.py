@@ -51,9 +51,9 @@ if (is_youtube(link)):
     title = youtube_1.title
     st.image(youtube_1.thumbnail_url, width=200)
 
-    with st.expander(":orange[Video Details]"):
-        st.write(f"Title: **:rainbow[{title}]**")
-        st.write(f"Length: **:rainbow[{youtube_1.length} seconds]**")
+    with st.expander("**:violet[Video Details]**"):
+        st.write(f"Title: **:blue[{title}]**")
+        st.write(f"Length: **:blue[{youtube_1.length}]** seconds")
 
         # Define list_vid dictionary
         video = [stream for stream in youtube_1.streams if stream.includes_audio_track and stream.includes_video_track]
@@ -70,7 +70,7 @@ if (is_youtube(link)):
 
         # For video
         if out == "Video":
-            strm = st.selectbox(":orange[Select Quality]", [resolution for resolution in list_vid.keys()])
+            strm = st.selectbox("**:violet[Select Quality]**", [resolution for resolution in list_vid.keys()])
             key_val = key_search(list_vid, strm)  # Now key_val holds the resolution string
             key_index = list(list_vid.keys()).index(key_val)  # Find the index in video list
             selected_stream = video[key_index]  # Access stream using the index
