@@ -64,7 +64,7 @@ if (is_youtube(link)):
             list_vid[resolution] = file_size
         st.write("**:green[Available Resolutions]**")
         for resolution, file_size in list_vid.items():
-            st.write(f"Resolution: {resolution} - File Size: {file_size}")
+            st.write(f":red[Resolution:] {resolution} - :red[File Size:] {file_size}")
 
         out = "Video"  # Set output to Video
 
