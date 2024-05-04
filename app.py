@@ -95,7 +95,7 @@ st.write("")
 st.markdown(
         """
         <div class="footer">
-            Made By **:rainbow[Yukesh G]** & **:rainbow[Sri Raman]** as a part of FINAL YEAR PROJECT
+            Made By 👨‍💻Yukesh G and 👨‍💻Sriraman Prasad
         </div>
 
         <style>
