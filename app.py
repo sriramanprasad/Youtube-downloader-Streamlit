@@ -62,7 +62,7 @@ if (is_youtube(link)):
             resolution = video[i].resolution
             file_size = f"{(video[i].filesize / (1024 * 1024)):.2f} MB" if video[i].filesize else "Unknown"
             list_vid[resolution] = file_size
-        st.write("**:Green[Available Resolutions]**")
+        st.write("**:green[Available Resolutions]**")
         for resolution, file_size in list_vid.items():
             st.write(f"Resolution: {resolution} - File Size: {file_size}")
 
