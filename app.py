@@ -95,7 +95,7 @@ st.write("")
 st.markdown(
         """
         <div class="footer">
-            Made By 👨‍💻Yukesh G and 👨‍💻Sriraman Prasad
+            Made By 👨‍💻<b>Yukesh G</b> and 👨‍💻<b>Sriraman Prasad </b>
         </div>
 
         <style>
