@@ -89,5 +89,5 @@ if (is_youtube(link)):
                 )
 
 else:
-    st.write("Please Enter a Valid Link")
+    st.write("**:blue[Please Enter a Valid Link]**")
 
